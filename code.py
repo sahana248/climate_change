@@ -43,6 +43,7 @@ def subplots(country):
         plt.plot(new_data.loc[name])
         plt.title(name)
         plt.xticks(rotation=45.0)
+        plt.savefig("subplot.png")
     plt.show()
 
 list_country= ['Brazil','China','India','Mexico','South Africa','United States','United Kingdom','World']

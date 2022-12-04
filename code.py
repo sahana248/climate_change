@@ -36,14 +36,16 @@ def subplots(country):
     year_5= year[::-1]
     #creating new dataframe with data from the selected countries and years
     new_data= country_table1.loc[country][year_5]
-    fig, axs = plt.subplots(2, 4, figsize=(25, 12))
+    fig, axs = plt.subplots(2, 4, figsize=(28, 13))
     #loop for plotting the subplots
     for ind,name in enumerate(country):
         plt.subplot(2,4,ind+1)
         plt.plot(new_data.loc[name])
         plt.title(name)
         plt.xticks(rotation=45.0)
-        plt.savefig("subplot.png")
+        plt.xlabel('Years')
+        plt.ylabel('% of land')
+    plt.savefig("subplot.png")
     plt.show()
 
 list_country= ['Brazil','China','India','Mexico','South Africa','United States','United Kingdom','World']

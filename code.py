@@ -50,6 +50,7 @@ def multiline_plot(country):
     plt.title('Change in urban population(1961-2021)')
     plt.savefig("multiline.png")
     plt.show()
+    
 def heatmap(country_filename):
     """
     This function takes the file name as input and returns the country's heatmap
@@ -83,12 +84,35 @@ def heatmap(country_filename):
     for i,value in enumerate(label): #loop to add correlation value to the heatmap
         for j in range(len(label)):
             ax.text(j,i,round(final_data[value][j],3),ha="center", va="center", color="r")       
-    ax.set_title("China")
+    ax.set_title("Correlation heatmap")
     fig.tight_layout() 
+    plt.show()
+ 
+def bar_graph():
+    """
+    This function plots two graphs for the G5 countries(given in list_country):
+        1. agricultural NO2 emission between(1999-2019)
+        2. agricultural methane emission between(1999-2019)
+    """
+    data= pd.read_csv('agri_no2.csv',skiprows=4)
+    year = ['1999','2009','2019']
+    data= data.loc[data['Country Name'].isin(list_country)]
+    #plotting bar graph for agricultural NO2 emission
+    data.plot(kind='bar',x='Country Name',y= year,rot=0,align='center')
+    plt.ylabel('NO2 emission(1000 metric ton CO2 equivalent)')
+    plt.title('Agricultural NO2 emission (1999-2019)')
+    plt.savefig('agri_NO2')
+    data1= pd.read_csv('agri_methane.csv',skiprows=4)
+    data1= data1.loc[data1['Country Name'].isin(list_country)]
+    #plotting bar graph for agricultural methane emission
+    data1.plot(kind='bar',x='Country Name',y= year,rot=0,align='center')
+    plt.ylabel('Methane emission(1000 metric ton CO2 equivalent)')
+    plt.title('Agricultural methane emission (1999-2019)')
+    plt.savefig('agri_methane')
     plt.show()
     
 list_country= ['Brazil','China','India','Mexico','South Africa']
 country_table1,year_val= tablefunc('urban_population.csv')
 subplots(list_country)
 heatmap('china.csv')
-
+bar_graph()

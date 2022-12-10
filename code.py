@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Fri Dec  2 17:54:00 2022
 
@@ -38,8 +37,7 @@ def multiline_plot(country):
     #creating new dataframe with data from the selected countries and years
     new_data= country_table1.loc[country][year_5]
     plt.rcParams["figure.figsize"] = (10,7)
-    #loop for plotting the graph
-    for ind,name in enumerate(country):
+    for ind,name in enumerate(country): #loop for plotting the graph
         plt.plot(year_5,new_data.loc[name],label=name)
         plt.legend()
         plt.xticks(rotation=45.0)
@@ -69,7 +67,7 @@ def heatmap(country_filename):
          'Agricultural land (sq. km)']
     heatmap_data=data.loc[ref]
     #creating a set of new label values
-    label=['Urban population','Fertilizer consump','NO2 emissions','methane emissions','Agricultural land area']  
+    label=['Urban population','Fertilizer consump','N2O emissions','methane emissions','Agricultural land area']  
     for i,values in enumerate(heatmap_data.index): #for loop to rename index for convenience while plotting the heat map
         heatmap_data=heatmap_data.rename(index={values:label[i]})
     heatmap_data = heatmap_data.drop(['Country Name','Country Code','Indicator Code','Indicator Name'],axis=1)
@@ -96,7 +94,8 @@ def bar_graph():
         1. agricultural NO2 emission between(1999-2019)
         2. agricultural methane emission between(1999-2019)
     """
-    data= pd.read_csv('agri_no2.csv',skiprows=4)
+    #reading agricultural N2O emission csv file into data
+    data= pd.read_csv('API_EN.ATM.NOXE.AG.KT.CE_DS2_en_csv_v2_4538206.csv',skiprows=4)
     year90_99= ['1990','1991','1992','1993','1994','1995','1996','1997','1998','1999']
     year00_09= ['2000','2001','2002','2003','2004','2005','2006','2007','2008','2009']
     year10_19= ['2010','2011','2012','2013','2014','2015','2016','2017','2018','2019']
@@ -105,12 +104,13 @@ def bar_graph():
     data['2000-2009']= data[year00_09].mean(axis=1)
     data['2010-2019']= data[year10_19].mean(axis=1)
     year=['1990-1999','2000-2009','2010-2019']
-    #plotting bar graph for agricultural NO2 emission
+    #plotting bar graph for agricultural N2O emission
     data.plot(kind='bar',x='Country Name',y= year,rot=15,align='center')
     plt.ylabel('NO2 emission(1000 metric ton CO2 equivalent)')
-    plt.title('Agricultural NO2 emission (1999-2019)')
-    plt.savefig('agri_NO2')
-    data1= pd.read_csv('agri_methane.csv',skiprows=4)
+    plt.title('Agricultural N2O emission (1999-2019)')
+    plt.savefig('agri_N2O')
+    #reading agricultural methane emission csv file into data
+    data1= pd.read_csv('API_EN.ATM.METH.AG.KT.CE_DS2_en_csv_v2_4684909.csv',skiprows=4)
     data1= data1.loc[data1['Country Name'].isin(list_country)]
     data1['1990-1999']= data1[year90_99].mean(axis=1)
     data1['2000-2009']= data1[year00_09].mean(axis=1)
@@ -151,10 +151,21 @@ def subplots():
 
 list_country=['Canada','France','Germany','Italy','Japan',
               'United Kingdom','United States']
-country_table1,year_table1= tablefunc('urban_population.csv')
-country_table2,year_table2= tablefunc('agri_land_km.csv') 
+"""
+run the function tablefunc using percentage of urban population csv file 
+as input and using the output tables in multiline_plot function
+"""
+country_table1,year_table1= tablefunc('API_SP.URB.TOTL.IN.ZS_DS2_en_csv_v2_4670460.csv')
+"""
+run the function tablefunc using percentage of urban population csv file 
+as input and using the output tables in subplots function
+"""
+country_table2,year_table2= tablefunc('API_AG.LND.AGRI.K2_DS2_en_csv_v2_4664177.csv')
+#calling the multililne_plot function using list_country as input
 multiline_plot(list_country)
+#calling heatmap function to plot heat map of United states
+heatmap('API_USA_DS2_en_csv_v2_4696777.csv')
+#calling heatmap function to plot heat map of United states
+heatmap('API_JPN_DS2_en_csv_v2_4662737.csv')
 bar_graph()
 subplots()
-heatmap('United States.csv')
-heatmap('Japan.csv')
